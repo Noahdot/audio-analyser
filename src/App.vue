@@ -1,10 +1,12 @@
 <template>
   <div class="wrapper">
-    {{ showNumber }}
+    {{ showNumber + ` - maxNumbr: ${maxNumber} - maxIndex: ${maxIndex}` }}
     <div class="controll-bar">
-      <button @click="start">Audio analyzer</button>
+      <button @click="start">start</button>
       <button @click="add">+</button>
       <button @click="min">-</button>
+      <input type="range" min="0" max="400" step="10" v-model="showNumber" />
+      <button @click="procAnalyser">Audio analyser</button>
     </div>
     <div class="audio-wrapper">
       <div v-for="(item, index) in dataArray" :key="index" :style="{ height: `${item}px` }"></div>
@@ -15,9 +17,9 @@
 </template>
 <script setup lang="ts">
 // import HelloWorld from './components/HelloWorld.vue'
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 const source = ref<MediaStreamAudioSourceNode>();
-const analyzer = ref<AnalyserNode>();
+const analyser = ref<AnalyserNode>();
 const oscillator = ref<OscillatorNode>();
 // const dataArray = ref<Uint8Array>();
 const dataArray = ref<number[]>();
@@ -28,7 +30,7 @@ const start  = () => {
     .then((stream) => {
       const audioContext = new AudioContext();
       source.value = audioContext.createMediaStreamSource(stream);
-      analyzer.value = audioContext.createAnalyser();
+      analyser.value = audioContext.createAnalyser();
       oscillator.value = audioContext.createOscillator();
 
       setupOscillator();
@@ -39,17 +41,38 @@ const start  = () => {
     })
 }
 
-const run = () => {
-  analyser.smoothingTimeConstant
-  const uint8Array = new Uint8Array(analyzer.value.frequencyBinCount);
+const maxNumber = ref(0);
+const maxIndex = ref(0);
 
-  // source.value?.connect(analyzer.value);
+const run = () => {
+  // analyser.value.smoothingTimeConstant = 0;
+  // const uint8Array = new Uint8Array(analyser.value.frequencyBinCount);
+  const uint8Array = new Uint8Array(24);
+
+  source.value?.connect(analyser.value);
+  // oscillator.value?.connect(analyser.value);
 
   oscillator.value.start();
-  oscillator.value?.connect(analyzer.value);
+  analyserData.value.length = 0;
+
   const update = () => {
-    analyzer.value.getByteFrequencyData(uint8Array);
+    maxNumber.value = 0;
+    analyser.value.getByteFrequencyData(uint8Array);
     dataArray.value = Array.from(uint8Array);
+    // dataArray.value = Array.from(uint8Array).filter(item => item > 100);
+
+    
+    for (let i = 0; i < dataArray.value.length; i++) {
+      if (dataArray.value[i] > maxNumber.value) {
+        maxNumber.value = dataArray.value[i];
+        maxIndex.value = i;
+      }
+    }
+    if (maxNumber.value > 150) analyserData.value.push(maxIndex.value);
+    // 3 開始是有效資料，5-7 男生 8以上女生
+    // 整段錄音過程要把這個 maxIndex 記錄到一個陣列，然後把陣列中50%相似的值取出來依個數做平均，這就是平均音頻
+
+
     requestAnimationFrame(update);
   }
 
@@ -64,11 +87,22 @@ const min = () => {
   showNumber.value = oscillator.value.frequency.value --;
 }
 
+watch(showNumber, (v) => {
+  oscillator.value.frequency.value = v;
+});
+
 const setupOscillator = () => {
   if (!oscillator.value) return;
 
   oscillator.value.type = 'sine';
-  oscillator.value.frequency.value = 20;
+  oscillator.value.frequency.value = 80;
+}
+
+const analyserData = ref([]);
+const procAnalyser = () => {
+  // analyserData.value.length = 0;
+  source.value?.disconnect(analyser.value);
+  console.log(analyserData.value);
 }
 
 // oscillator.stop();
@@ -92,8 +126,8 @@ const setupOscillator = () => {
     background-color: #333;
 
     & > div {
-      width: 1px;
-      background-color: #fff;
+      width: 42px;
+      background-color: #599fdb;
     }
   }
 }
