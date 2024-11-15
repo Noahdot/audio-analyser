@@ -5,6 +5,9 @@
       <button @click="start">start</button>
       <button @click="add">+</button>
       <button @click="min">-</button>
+      <!-- <button @click="test(1)">1</button>
+      <button @click="test(2)">2</button>
+      <button @click="test(3)">3</button> -->
       <input type="range" min="0" max="400" step="10" v-model="showNumber" />
       <button @click="procAnalyser">Audio analyser</button>
     </div>
@@ -24,6 +27,10 @@ const oscillator = ref<OscillatorNode>();
 // const dataArray = ref<Uint8Array>();
 const dataArray = ref<number[]>();
 const showNumber = ref(0);
+
+const test = (num) => {
+  oscillator.value.frequency.value = 100 + num * 10;
+}
 
 const start  = () => {
   navigator.mediaDevices.getUserMedia({ audio: true })
@@ -98,11 +105,29 @@ const setupOscillator = () => {
   oscillator.value.frequency.value = 80;
 }
 
+const result = ref({});
 const analyserData = ref([]);
 const procAnalyser = () => {
+  result.value = {};
   // analyserData.value.length = 0;
   source.value?.disconnect(analyser.value);
-  console.log(analyserData.value);
+  // console.log(analyserData.value);
+  analyserData.value.forEach((item) => {
+    // 紀錄每項的次數
+    if (result.value[item]) {
+      result.value[item] ++;
+    } else {
+      result.value[item] = 1;
+    }
+  });
+
+  console.log(result.value);
+  const max = Math.max(...Object.values(result.value));
+  // console.log(max);
+  const maxKey = Object.keys(result.value).reduce((preKey, curKey) => {
+    return result.value[preKey] > result.value[curKey]? preKey: curKey;
+  });
+  console.log(maxKey);
 }
 
 // oscillator.stop();
