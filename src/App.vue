@@ -35,6 +35,8 @@ const start  = () => {
       analyser.value = audioContext.createAnalyser();
       oscillator.value = audioContext.createOscillator();
 
+      setupOscillator();
+      setFrequency(400);
       run();
     })
     .catch((err) => {
@@ -51,8 +53,9 @@ const run = () => {
   // const uint8Array = new Uint8Array(analyser.value.frequencyBinCount);
   const uint8Array = new Uint8Array(24);
 
-  source.value?.connect(analyser.value);
-  // oscillator.value?.connect(analyser.value);
+  // source.value?.connect(analyser.value);
+  oscillator.value?.connect(analyser.value);
+  oscillator.value?.start();
 
   analyserData.value.length = 0;
 
@@ -86,9 +89,11 @@ const analyserData = ref([]);
 const procAnalyser = () => {
   result.value = {};
   active.value = false;
-  // analyserData.value.length = 0;
-  source.value?.disconnect(analyser.value);
-  // console.log(analyserData.value);
+
+
+  oscillator.value?.stop();
+  // source.value?.disconnect(analyser.value);
+
   analyserData.value.forEach((item) => {
     // 紀錄每項的次數
     if (result.value[item]) {
@@ -105,14 +110,42 @@ const procAnalyser = () => {
   if (keys.length === 0) return console.log('no voice data');
   
   const entries = Object.entries(result.value);
+  const sum = analyserData.value.length;
+  console.log('sum: ', sum);
   entries.sort((a, b) => b[1] - a[1]);
-  const sortKey = entries.map(item => item[0]);
-  console.log(sortKey);
-  sex.value = sortKey[0] < 8? 'Man': 'Woman';
+  const n = entries.map((item) => {
+    return {
+      index: item[0],
+      count: item[1],
+      persent: Math.round(item[1] / sum * 100) + '%'
+    }
+  });
+
+  console.log(n);
+
+
+
+  // const sortKey = entries.map(item => item[0]);
+  // console.log(sortKey);
+  // let showObj = {};
+  // entries.forEach((item) => {
+  //   showObj[item[0]] = Number(item[1]) / Number(sum) + '%';
+  // });
+  // console.log(showObj);
+  // console.log(entries);
+  // sex.value = sortKey[0] < 8? 'Man': 'Woman';
   // const maxKey = Object.keys(result.value).reduce((preKey, curKey) => {
   //   return result.value[preKey] > result.value[curKey]? preKey: curKey;
   // });
   // console.log(maxKey);
+}
+
+const setupOscillator = () => {
+  oscillator.value.type = 'sine';
+}
+
+const setFrequency = (frequency) => {
+  oscillator.value.frequency.value = frequency;
 }
 
 </script>
