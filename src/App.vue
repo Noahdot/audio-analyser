@@ -1,18 +1,38 @@
 <template>
   <div class="wrapper">
       {{ sex }}
-    <div class="controll-bar">
-      <button @click="start">start</button>
-      <button @click="procAnalyser">Audio analyser</button>
+    <div class="info">
+      <div class="title">簡易音頻分析器</div>
+      <ul>
+        <li>此服務可簡單透過平均音頻的數據，分析男女聲。</li>
+        <li>典型成年男性的人聲基本頻率為85至180Hz，典型成年女性則為165至255Hz。(wiki)</li>
+        <li>說話時間越長，準確度越高</li>
+      </ul>
+    </div>
+    <div class="control-bar">
+      <button @click="start">開始收音</button>
+      <button @click="procAnalyser">分析</button>
     </div>
     <div class="audio-wrapper" :class="{ active }">
-      <div
-        v-for="(item, index) in showDataArray"
-        :key="index"
-        :style="{ 
-          height: `${255 - item * 10}px`
-        }"
-      ></div>
+      <template v-if="active">
+        <div
+          v-for="(item, index) in showDataArray"
+          :key="index"
+          :style="{ 
+            height: `${255 - item * 10}px`
+          }"
+          class="audio-item"
+        ></div>
+      </template>
+      <template v-else>
+        <div class="result-wrapper">
+          <ul>
+            <li v-for="(item, index) in finalResult">
+              {{ `頻率: ${indexToAudio(item.index)}，次數: ${item.count}，佔比: ${item.persent}` }}
+            </li>
+          </ul>
+        </div>
+      </template>
     </div>
   </div>
 </template>
@@ -25,6 +45,7 @@ const dataArray = ref<number[]>();
 const showDataArray = ref<number[]>();
 const active = ref(false);
 const sex = ref('');
+const useOsci = ref(false);
 
 
 const start  = () => {
@@ -35,8 +56,10 @@ const start  = () => {
       analyser.value = audioContext.createAnalyser();
       oscillator.value = audioContext.createOscillator();
 
-      setupOscillator();
-      setFrequency(400);
+      if (useOsci.value) {
+        setupOscillator();
+        setFrequency(400);
+      }
       run();
     })
     .catch((err) => {
@@ -50,12 +73,16 @@ const maxIndex = ref(0);
 const run = () => {
   active.value = true;
   sex.value = '';
+  finalResult.value = [];
   // const uint8Array = new Uint8Array(analyser.value.frequencyBinCount);
   const uint8Array = new Uint8Array(24);
 
-  // source.value?.connect(analyser.value);
-  oscillator.value?.connect(analyser.value);
-  oscillator.value?.start();
+  if (useOsci.value) {
+    oscillator.value?.connect(analyser.value);
+    oscillator.value?.start();
+  } else {
+    source.value?.connect(analyser.value);
+  }
 
   analyserData.value.length = 0;
 
@@ -74,8 +101,6 @@ const run = () => {
       }
     }
     if (maxNumber.value > 150) analyserData.value.push(maxIndex.value);
-    // 5-7 男生 8以上女生
-    // 整段錄音過程要把這個 maxIndex 記錄到一個陣列，然後把陣列中50%相似的值取出來依個數做平均，這就是平均音頻
 
 
     requestAnimationFrame(update);
@@ -86,26 +111,24 @@ const run = () => {
 
 const result = ref({});
 const analyserData = ref([]);
+const finalResult = ref([]);
 const procAnalyser = () => {
   result.value = {};
   active.value = false;
 
-
-  oscillator.value?.stop();
-  // source.value?.disconnect(analyser.value);
+  if (useOsci.value) {
+    oscillator.value?.stop();
+  } else {
+    source.value?.disconnect(analyser.value);
+  }
 
   analyserData.value.forEach((item) => {
-    // 紀錄每項的次數
     if (result.value[item]) {
       result.value[item] ++;
     } else {
       result.value[item] = 1;
     }
   });
-
-  // console.log(result.value);
-  // const max = Math.max(...Object.values(result.value));
-  // console.log(max);
   const keys = Object.keys(result.value);
   if (keys.length === 0) return console.log('no voice data');
   
@@ -113,7 +136,7 @@ const procAnalyser = () => {
   const sum = analyserData.value.length;
   console.log('sum: ', sum);
   entries.sort((a, b) => b[1] - a[1]);
-  const n = entries.map((item) => {
+  finalResult.value = entries.map((item) => {
     return {
       index: item[0],
       count: item[1],
@@ -121,23 +144,7 @@ const procAnalyser = () => {
     }
   });
 
-  console.log(n);
-
-
-
-  // const sortKey = entries.map(item => item[0]);
-  // console.log(sortKey);
-  // let showObj = {};
-  // entries.forEach((item) => {
-  //   showObj[item[0]] = Number(item[1]) / Number(sum) + '%';
-  // });
-  // console.log(showObj);
-  // console.log(entries);
-  // sex.value = sortKey[0] < 8? 'Man': 'Woman';
-  // const maxKey = Object.keys(result.value).reduce((preKey, curKey) => {
-  //   return result.value[preKey] > result.value[curKey]? preKey: curKey;
-  // });
-  // console.log(maxKey);
+  console.log(finalResult.value);
 }
 
 const setupOscillator = () => {
@@ -148,6 +155,31 @@ const setFrequency = (frequency) => {
   oscillator.value.frequency.value = frequency;
 }
 
+const indexToAudio = (index) => {
+  switch (index) {
+    case '0': return "~10";
+    case '1': return "~10";
+    case '2': return "10~30";
+    case '3': return "30~60";
+    case '4': return "60~80";
+    case '5': return "80~100";
+    case '6': return "100~130";
+    case '7': return "130~150";
+    case '8': return "150~170";
+    case '9': return "170~200";
+    case '10': return "200~220";
+    case '11': return "220~240";
+    case '12': return "240~270";
+    case '13': return "270~290";
+    case '14': return "290~310";
+    case '15': return "310~340";
+    case '16': return "340~360";
+    case '17': return "360~380";
+    case '18': return "380~400";
+    default: return "Invalid index";
+  }
+}
+
 </script>
 <style lang="scss" scoped>
 .wrapper {
@@ -156,6 +188,20 @@ const setFrequency = (frequency) => {
   align-items: center;
   justify-content: center;
   width: 100%;
+
+  .info {
+    ul {
+      li {
+        text-align: left;
+      }
+    }
+  }
+
+  .control-bar {
+    & button {
+      margin: 1rem;
+    }
+  }
 
   .audio-wrapper {
     display: flex;
@@ -169,10 +215,27 @@ const setFrequency = (frequency) => {
       background: linear-gradient(to top, rgb(175, 255, 175) 0%, rgb(255, 255, 157) 30%, rgb(253, 128, 128) 100%);
     }
 
-    & > div {
+    & > .audio-item {
       width: calc(100% / 24);
       height: 255px;
       background-color: #333;
+    }
+
+    .result-wrapper {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #fff;
+
+      ul {
+        list-style: none;
+
+        li {
+          text-align: left;
+        }
+      }
     }
   }
 }
