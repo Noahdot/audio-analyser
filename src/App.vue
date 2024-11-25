@@ -1,12 +1,12 @@
 <template>
   <div class="wrapper">
-    <!-- <div>
+    <div>
       <router-link to="/">home</router-link>
       <router-link to="/about">about</router-link>
     </div>
     <div>
       <router-view></router-view>
-    </div> -->
+    </div>
     <div class="info">
       <div class="title">簡易音頻分析器</div>
       <ul>
