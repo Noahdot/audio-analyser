@@ -8,16 +8,16 @@
       <router-view></router-view>
     </div> -->
     <div class="info">
-      <div class="title">簡易音頻分析器</div>
+      <div class="title">{{ $t('home.app_title') }}</div>
       <ul>
-        <li>此服務可簡單透過平均音頻的數據，分析男女聲。</li>
-        <li>典型成年男性的人聲基本頻率為85至180Hz，典型成年女性則為165至255Hz。(wiki)</li>
-        <li>說話時間越長，準確度越高</li>
+        <li>{{ $t('home.app_description_1') }}</li>
+        <li>{{ $t('home.app_description_2') }}</li>
+        <li>{{ $t('home.app_description_3') }}</li>
       </ul>
     </div>
     <div class="control-bar">
-      <button @click="start">開始收音</button>
-      <button @click="procAnalyser">分析</button>
+      <button @click="start">{{ $t('button.start') }}</button>
+      <button @click="procAnalyser">{{ $t('button.analyser') }}</button>
     </div>
     <div class="audio-wrapper" :class="{ active }">
       <template v-if="active">

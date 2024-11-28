@@ -1,0 +1,12 @@
+{
+  "home": {
+    "app_title": "簡易音頻分析器 {part1}!",
+    "app_description_1": "此服務可簡單透過平均音頻的數據，分析男女聲。",
+    "app_description_2": "典型成年男性的人聲基本頻率為85至180Hz，典型成年女性則為165至255Hz。",
+    "app_description_3": "說話語調平穩、時間越長，準確度越高。"
+  },
+  "button" : {
+    "start": "開始",
+    "analyser": "分析"
+  }
+}
