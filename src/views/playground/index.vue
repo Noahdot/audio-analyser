@@ -1,13 +1,5 @@
 <template>
   <div class="wrapper">
-    <div class="info">
-      <div class="title">{{ $t('home.app_title') }}</div>
-      <ul>
-        <li>{{ $t('home.app_description_1') }}</li>
-        <li>{{ $t('home.app_description_2') }}</li>
-        <li>{{ $t('home.app_description_3') }}</li>
-      </ul>
-    </div>
     <div class="control-bar">
       <button @click="start">{{ $t('button.start') }}</button>
       <button @click="procAnalyser">{{ $t('button.analyser') }}</button>
@@ -34,8 +26,10 @@
       </template>
     </div>
   </div>
+  <NoticeDialog />
 </template>
 <script setup lang="ts">
+import NoticeDialog from '@/components/NoticeDialog.vue';
 import { ref } from 'vue';
 const source = ref<MediaStreamAudioSourceNode>();
 const analyser = ref<AnalyserNode>();
@@ -188,14 +182,6 @@ const indexToAudio = (index) => {
   justify-content: center;
   width: 100%;
 
-  .info {
-    ul {
-      li {
-        text-align: left;
-      }
-    }
-  }
-
   .control-bar {
     & button {
       margin: 1rem;
@@ -235,6 +221,14 @@ const indexToAudio = (index) => {
           text-align: left;
         }
       }
+    }
+  }
+}
+
+.notice-dialog {
+  ul {
+    li {
+      text-align: left;
     }
   }
 }
