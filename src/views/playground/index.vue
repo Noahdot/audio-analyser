@@ -1,44 +1,39 @@
 <template>
   <div class="wrapper">
     <div class="control-bar">
-      <button @click="start">{{ $t('button.start') }}</button>
-      <button @click="procAnalyser">{{ $t('button.analyser') }}</button>
+      <button @click="start" :disabled="active">{{ $t('button.start') }}</button>
+      <button @click="stop" :disabled="!active">{{ $t('button.stop') }}</button>
     </div>
-    <div class="audio-wrapper" :class="{ active }">
-      <template v-if="active">
-        <div
-          v-for="(item, index) in showDataArray"
-          :key="index"
-          :style="{ 
-            height: `${255 - item * 10}px`
-          }"
-          class="audio-item"
-        ></div>
-      </template>
-      <template v-else>
-        <div class="result-wrapper">
-          <ul>
-            <li v-for="(item, index) in finalResult">
-              {{ `頻率: ${indexToAudio(item.index)}，次數: ${item.count}，佔比: ${item.persent}` }}
-            </li>
-          </ul>
-        </div>
-      </template>
+    <div class="result-wrapper" v-if="showResult">
+      <AnalyserResult :data="analyserData" :final-result="finalResult" />
     </div>
+    <div class="audio-wrapper" v-else :class="{ active }">
+      <div
+        v-for="(item, index) in showDataArray"
+        :key="index"
+        :style="{ 
+          height: `${255 - item * 10}px`
+        }"
+        class="audio-item"
+      ></div>
+    </div>
+    
   </div>
   <NoticeDialog />
 </template>
 <script setup lang="ts">
-import NoticeDialog from '@/components/NoticeDialog.vue';
 import { ref } from 'vue';
+import NoticeDialog from '@/components/NoticeDialog.vue';
+import AnalyserResult from '@/components/AnalyserResult.vue';
 const source = ref<MediaStreamAudioSourceNode>();
 const analyser = ref<AnalyserNode>();
 const oscillator = ref<OscillatorNode>();
 const dataArray = ref<number[]>();
 const showDataArray = ref<number[]>();
 const active = ref(false);
-const sex = ref('');
 const useOsci = ref(false);
+
+const showResult = ref(false);
 
 
 const start  = () => {
@@ -63,10 +58,12 @@ const start  = () => {
 const maxNumber = ref(0);
 const maxIndex = ref(0);
 
+let timer = null;
+
 const run = () => {
   active.value = true;
-  sex.value = '';
   finalResult.value = [];
+  showResult.value = false;
   // const uint8Array = new Uint8Array(analyser.value.frequencyBinCount);
   const uint8Array = new Uint8Array(24);
 
@@ -77,7 +74,7 @@ const run = () => {
     source.value?.connect(analyser.value);
   }
 
-  analyserData.value.length = 0;
+  analyserData.value.length = 0; //沒清空?
 
   const update = () => {
     maxNumber.value = 0;
@@ -95,19 +92,26 @@ const run = () => {
     }
     if (maxNumber.value > 150) analyserData.value.push(maxIndex.value);
 
-
-    requestAnimationFrame(update);
+    timer = requestAnimationFrame(update);
   }
 
-  requestAnimationFrame(update);
+  const startAnimation = () => {
+    timer = requestAnimationFrame(update);
+  }
+
+  
+
+  startAnimation();
 }
 
 const result = ref({});
 const analyserData = ref([]);
 const finalResult = ref([]);
-const procAnalyser = () => {
+const stop = () => {
+  cancelAnimationFrame(timer);
   result.value = {};
   active.value = false;
+  showResult.value = true;
 
   if (useOsci.value) {
     oscillator.value?.stop();
@@ -128,12 +132,12 @@ const procAnalyser = () => {
   const entries = Object.entries(result.value);
   const sum = analyserData.value.length;
   console.log('sum: ', sum);
-  entries.sort((a, b) => b[1] - a[1]);
+  // entries.sort((a, b) => b[1] - a[1]);
   finalResult.value = entries.map((item) => {
     return {
       index: item[0],
       count: item[1],
-      persent: Math.round(item[1] / sum * 100) + '%'
+      percent: Math.round(item[1] / sum * 100) + '%'
     }
   });
 
@@ -146,31 +150,6 @@ const setupOscillator = () => {
 
 const setFrequency = (frequency) => {
   oscillator.value.frequency.value = frequency;
-}
-
-const indexToAudio = (index) => {
-  switch (index) {
-    case '0': return "< 10";
-    case '1': return "< 10";
-    case '2': return "10~30";
-    case '3': return "30~60";
-    case '4': return "60~80";
-    case '5': return "80~100";
-    case '6': return "100~130";
-    case '7': return "130~150";
-    case '8': return "150~170";
-    case '9': return "170~200";
-    case '10': return "200~220";
-    case '11': return "220~240";
-    case '12': return "240~270";
-    case '13': return "270~290";
-    case '14': return "290~310";
-    case '15': return "310~340";
-    case '16': return "340~360";
-    case '17': return "360~380";
-    case '18': return "380~400";
-    default: return "> 400";
-  }
 }
 
 </script>
@@ -222,6 +201,11 @@ const indexToAudio = (index) => {
         }
       }
     }
+  }
+
+  .result-wrapper {
+    width: 1024px;
+    background-color: #333;
   }
 }
 

@@ -7,10 +7,19 @@
   },
   "button" : {
     "start": "開始",
+    "stop": "停止",
     "analyser": "分析",
     "confirm": "確認"
   },
   "dialog": {
     "dont_show_again": "今日不再顯示"
+  },
+  "chart": {
+    "ratio": "比例",
+    "frequency": "頻率",
+    "frequency_ratio": "頻率比例",
+    "frequency_segment": "頻率區間",
+    "original_data": "音頻原始數據",
+    "time": "時間"
   }
 }

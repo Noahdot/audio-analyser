@@ -7,10 +7,19 @@
   },
   "button" : {
     "start": "start",
+    "stop": "stop",
     "analyser": "analyser",
     "confirm": "confirm"
   },
   "dialog": {
     "dont_show_again": "Don't show again today"
+  },
+  "chart": {
+    "ratio": "Ratio",
+    "frequency": "Frequency",
+    "frequency_ratio": "Frequency Ratio",
+    "frequency_segment": "Frequency Segment",
+    "original_data": "Original Audio Data",
+    "time": "Time"
   }
 }
