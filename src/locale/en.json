@@ -1,15 +1,16 @@
 {
   "app": {
-    "title": "Simple Audio Analyzer",
-    "description_1": "This service analyzes gender through average audio frequencies.",
-    "description_2": "Typical male voices range from 85 to 180 Hz, while female voices range from 165 to 255 Hz.",
-    "description_3": "Longer speaking durations improve accuracy."
+    "title": "Simple Audio Analyser",
+    "description_1": "Analyse your voice to reveal its frequency distribution.",
+    "description_2": "The longer and steadier your speech, the more accurate the results (5+ seconds recommended).",
+    "description_3": "Typical male voices range from 85–180Hz, while female voices range from 165–255Hz (source: Wiki).",
+    "locale": "English"
   },
   "button" : {
-    "start": "start",
-    "stop": "stop",
-    "analyser": "analyser",
-    "confirm": "confirm"
+    "start": "Start",
+    "stop": "Stop",
+    "analyser": "Analyser",
+    "confirm": "Confirm"
   },
   "dialog": {
     "dont_show_again": "Don't show again today"

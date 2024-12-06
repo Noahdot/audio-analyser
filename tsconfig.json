@@ -1,13 +1,17 @@
 {
   "compilerOptions": {
-    "outDir": "./dist",
+    "outDir": "./lib",
+    "declaration": true,
     "target": "ESNext",
     "module": "ESNext",
     "strict": true,
     "jsx": "preserve",
     "moduleResolution": "Node",
     "esModuleInterop": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "types": [
+      "unplugin-icons/types/vue",
+    ]
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]

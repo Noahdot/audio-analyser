@@ -1,0 +1,26 @@
+{
+  "app": {
+    "title": "简易音频分析器",
+    "description_1": "透过分析您的声音，来呈现您的音频占比",
+    "description_2": "说话语调平稳、时间越长，准确度越高。(建议五秒以上较佳)",
+    "description_3": "典型成年男性的人声基本频率为85至180Hz，典型成年女性则为165至255Hz。(参考自 wiki)",
+    "locale": "中文"
+  },
+  "button" : {
+    "start": "开始",
+    "stop": "停止",
+    "analyser": "分析",
+    "confirm": "确认"
+  },
+  "dialog": {
+    "dont_show_again": "今日不再显示"
+  },
+  "chart": {
+    "ratio": "比例",
+    "frequency": "频率",
+    "frequency_ratio": "频率比例",
+    "frequency_segment": "频率区间",
+    "original_data": "音频原始数据",
+    "time": "时间"
+  }
+ }

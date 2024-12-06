@@ -3,6 +3,19 @@
     <div class="control-bar">
       <button @click="start" :disabled="active">{{ $t('button.start') }}</button>
       <button @click="stop" :disabled="!active">{{ $t('button.stop') }}</button>
+      <div class="settings-panel">
+        <el-dropdown @command="handleCommand">
+          <MaterialSymbolsLanguage class="icon-lang" />
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item command="en">English</el-dropdown-item>
+              <el-dropdown-item command="zh-CN">简中</el-dropdown-item>
+              <el-dropdown-item command="zh-TW">繁中</el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
+        <MaterialSymbolsInfoOutline class="icon-info" @click="showDialog" />
+      </div>
     </div>
     <div class="result-wrapper" v-if="showResult">
       <AnalyserResult :data="analyserData" :final-result="finalResult" />
@@ -11,17 +24,17 @@
       <div
         v-for="(item, index) in showDataArray"
         :key="index"
-        :style="{ 
-          height: `${255 - item * 10}px`
-        }"
+        :style="{ height: `${255 - item * 10}px` }"
         class="audio-item"
       ></div>
     </div>
-    
   </div>
-  <NoticeDialog />
+  <NoticeDialog ref="noticeDialogRef" />
 </template>
 <script setup lang="ts">
+import MaterialSymbolsLanguage from '~icons/material-symbols/language';
+import MaterialSymbolsInfoOutline from '~icons/material-symbols/info-outline';
+
 import { ref } from 'vue';
 import NoticeDialog from '@/components/NoticeDialog.vue';
 import AnalyserResult from '@/components/AnalyserResult.vue';
@@ -34,6 +47,17 @@ const active = ref(false);
 const useOsci = ref(false);
 
 const showResult = ref(false);
+const noticeDialogRef = ref();
+const showDialog = () => {
+  noticeDialogRef.value.showDialogFromParent();
+}
+
+import { useI18n } from 'vue-i18n';
+const { locale } = useI18n();
+const handleCommand = (command) => {
+  locale.value = command;
+  localStorage.setItem('locale', command);
+}
 
 
 const start  = () => {
@@ -162,8 +186,39 @@ const setFrequency = (frequency) => {
   width: 100%;
 
   .control-bar {
+    width: 1024px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+
     & button {
       margin: 1rem;
+    }
+
+    .settings-panel {
+      position: absolute;
+      top: 0px;
+      right: 0px;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .el-dropdown {
+        margin: 0 1rem;
+
+        & * {
+          outline: none;
+        }
+      }
+
+      .icon-lang, .icon-info {
+        width: 24px;
+        height: auto;
+        color: #686868;
+        cursor: pointer;
+      }
     }
   }
 

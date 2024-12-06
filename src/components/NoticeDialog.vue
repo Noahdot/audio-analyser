@@ -19,7 +19,7 @@ import { onBeforeMount, ref } from 'vue';
 import DialogWrapper from '@/components/DialogWrapper.vue';
 import { useSuppressDialog } from '@/composables/useSuppressDialog';
 
-const { checkSuppressTime, setSuppressTime } = useSuppressDialog();
+const { checkSuppressTime, setSuppressTime, removeSuppressTime } = useSuppressDialog();
 const showDialog = ref(false);
 
 const dialogInit = () => {
@@ -31,6 +31,15 @@ const updateSuppressSettings = ({ suppress, suppressSwitch }) => {
     setSuppressTime('notice');
   }
 }
+
+const showDialogFromParent = () => {
+  removeSuppressTime('notice');
+  dialogInit();
+}
+
+defineExpose({
+  showDialogFromParent
+});
 
 onBeforeMount(() => {
   dialogInit();

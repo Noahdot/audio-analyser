@@ -35,18 +35,33 @@ export const useSuppressDialog = () => {
           time: getTomorrow()
         });
       }
-      localStorage.setItem('suppress', JSON.stringify(suppressData));
+      updateSuppress(suppressData);
     } else {
       const data = {
         key,
         time: getTomorrow()
       };
-      localStorage.setItem('suppress', JSON.stringify([data]));
+      updateSuppress([data]);
     }
+  }
+
+  const removeSuppressTime = (key: string): void => {
+    const suppressData = getSuppressArray();
+    if (suppressData) {
+      const target = suppressData.find((item: any) => item.key === key);
+      if (target) {
+        updateSuppress(suppressData.filter((item: any) => item.key !== key));
+      }
+    }
+  }
+
+  const updateSuppress = (array) => {
+    localStorage.setItem('suppress', JSON.stringify(array));
   }
 
   return {
     checkSuppressTime,
-    setSuppressTime
+    setSuppressTime,
+    removeSuppressTime
   }
 }
