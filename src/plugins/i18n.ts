@@ -1,12 +1,12 @@
-import { createI18n } from 'vue-i18n';
+import { createI18n, LocaleMessages, VueMessageType } from 'vue-i18n';
 
-const loadLocaleMessages = () => {
+const loadLocaleMessages = (): LocaleMessages<VueMessageType> => {
   const modules = import.meta.glob('../locale/*.json', { eager: true });
-  const messages = {};
+  const messages: LocaleMessages<VueMessageType> = {};
   for (const path in modules) {
     const match = path.match(/\.\/locale\/(.*)\.json$/);
     const locale = match && match[1];
-    if (locale) messages[locale] = modules[path].default;
+    if (locale) messages[locale] = (modules[path] as { default: any }).default;
   }
   return messages;
 }
