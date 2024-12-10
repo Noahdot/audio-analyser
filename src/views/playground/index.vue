@@ -37,25 +37,21 @@ import NoticeDialog from '@/components/NoticeDialog.vue';
 import AnalyserResult from '@/components/AnalyserResult.vue';
 import MaterialSymbolsLanguage from '~icons/material-symbols/language';
 import MaterialSymbolsInfoOutline from '~icons/material-symbols/info-outline';
+import { useI18n } from 'vue-i18n';
 
 import { useAudioAnalyser } from '@/composables/useAudioAnalyser';
 const { startAudioCapture, stopAudioCapture, originAudioData } = useAudioAnalyser();
 
-const active = ref(false);
-const showResult = ref(false);
+const active = ref<boolean>(false);
+const showResult = ref<boolean>(false);
 
-const showDataArray = ref([]);
-const analyserData = ref([]);
-const finalResult = ref([]);
+const showDataArray = ref<number[]>([]);
+const analyserData = ref<number[]>([]);
+const finalResult = ref<any[]>([]);
 const noticeDialogRef = ref();
 const showDialog = () => {
   noticeDialogRef.value.showDialogFromParent();
 }
-
-
-watch(originAudioData, (value) => {
-  showDataArray.value = value;
-}, { deep: true });
 
 const start  = () => {
   showResult.value = false;
@@ -79,13 +75,15 @@ const stop = () => {
   showResult.value = true;
 }
 
-import { useI18n } from 'vue-i18n';
 const { locale } = useI18n();
-const handleCommand = (command) => {
+const handleCommand = (command: string) => {
   locale.value = command;
   localStorage.setItem('locale', command);
 }
 
+watch(originAudioData, (value) => {
+  showDataArray.value = value;
+}, { deep: true });
 </script>
 <style lang="scss" scoped>
 .wrapper {
