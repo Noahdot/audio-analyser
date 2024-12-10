@@ -2,7 +2,7 @@
   <dialog-wrapper
     :title="$t('app.title')"
     :suppress="true"
-    width="800"
+    :width="dynamicWidth"
     @update:suppress-settings="updateSuppressSettings"
     v-model:show-dialog="showDialog"
   >
@@ -20,10 +20,12 @@ import DialogWrapper from '@/components/DialogWrapper.vue';
 import { useSuppressDialog } from '@/composables/useSuppressDialog';
 
 const { checkSuppressTime, setSuppressTime, removeSuppressTime } = useSuppressDialog();
-const showDialog = ref(false);
+const showDialog = ref<boolean>(false);
+const dynamicWidth = ref<string>('800')
 
 const dialogInit = () => {
   showDialog.value = checkSuppressTime('notice');
+  dynamicWidth.value = window.innerWidth > 800 ? '800' : '90%';
 }
 
 const updateSuppressSettings = ({ suppress, suppressSwitch }) => {

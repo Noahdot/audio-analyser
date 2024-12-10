@@ -94,7 +94,8 @@ watch(originAudioData, (value) => {
   width: 100%;
 
   .control-bar {
-    width: 1024px;
+    width: 90%;
+    max-width: 1024px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -143,7 +144,7 @@ watch(originAudioData, (value) => {
     }
 
     & > .audio-item {
-      width: calc(100% / 24);
+      width: calc(100% / 20);
       height: 255px;
       background-color: #333;
     }
@@ -158,7 +159,8 @@ watch(originAudioData, (value) => {
   }
 
   .result-wrapper {
-    width: 1024px;
+    width: 90%;
+    max-width: 1024px;
     background-color: #333;
   }
 }
