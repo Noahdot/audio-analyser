@@ -2,7 +2,7 @@
 
 [English](https://github.com/Noahdot/audio-analyser/blob/master/README.md) | 繁體中文 | [简体中文](https://github.com/Noahdot/audio-analyser/blob/master/README.zh-CN.md)
 
-`vue-audio-analyser` 是一個 Vue 3 的組合式函式，利用了 Web Audio API，方便地從使用者的麥克風獲取音訊數據並進行分析。它提供了開始和停止音訊捕獲的方法，以及實時的音訊數據，以供可視化或其他處理。
+`vue-audio-analyser` 是一個 Vue 3 的組合式函式，能夠簡單分辨男女聲的小玩具，它利用了 Web Audio API，方便地從使用者的麥克風獲取音訊數據並進行分析。它提供了開始和停止音訊捕獲的方法，以及實時的音訊數據，以供可視化或其他處理。
 
 線上體驗: [vue-audio-analyser](https://noahdot.github.io/audio-analyser/)
 
@@ -65,3 +65,4 @@ const yourChartData = analyserData.map((item) => {
 ## Notice
 - 確保您的應用程式在 HTTPS 協議下運行，因為瀏覽器僅允許在安全環境下訪問使用者的麥克風。
 - 使用該套件時，請注意處理使用者拒絕授權的情況。
+- 由於最初開發目的是解決男女聲音的分辨問題，所以上限目前只捕捉到 400 hz。

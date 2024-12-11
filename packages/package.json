@@ -1,6 +1,6 @@
 {
   "name": "vue-audio-analyser",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A small toy for converting audio streams into frequencies",
   "main": "index.js",
   "type": "module",

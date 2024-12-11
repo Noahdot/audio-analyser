@@ -2,7 +2,7 @@
 
 English | [繁體中文](https://github.com/Noahdot/audio-analyser/blob/master/README.zh-TW.md) | [简体中文](https://github.com/Noahdot/audio-analyser/blob/master/README.zh-CN.md)
 
-`vue-audio-analyser` is a Vue 3 composable function that leverages the Web Audio API to easily capture and analyze audio data from the user's microphone. It provides methods to start and stop audio capture, as well as real-time audio data for visualization or other processing.
+`vue-audio-analyser` is a Vue 3 composable function that leverages the Web Audio API to easily capture and analyze audio data from the user's microphone. It includes a simple tool to distinguish between male and female voices. The function provides methods to start and stop audio capture, as well as real-time audio data for visualization or other processing.
 
 Live Demo: [vue-audio-analyser](https://noahdot.github.io/audio-analyser/)
 
@@ -65,3 +65,4 @@ const yourChartData = analyserData.map((item) => {
 ## Notice
 - Ensure your application runs under the HTTPS protocol, as browsers only allow microphone access in secure environments.
 - When using this package, make sure to handle cases where the user denies microphone access.
+- Since the primary purpose of the initial development was to distinguish between male and female voices, the frequency capture is currently limited to 400 Hz.
