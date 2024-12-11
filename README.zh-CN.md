@@ -56,9 +56,9 @@ const yourChartData = analyserData.map((item) => {
 ## API
 - `startAudioCapture()`: 开始音讯捕获，请求使用者的麦克风访问权限，并开始实时收集音讯数据。
 - `stopAudioCapture()`: 停止音讯捕获，断开音讯源，并返回捕获的数据。
- - 返回值:
- - `analyserData`: 包含音讯分析的索引数据。
- - `parsedData`: 经解析的数据，包含每个频率区间的计数和百分比。
+  - 返回值:
+    - `analyserData`: 包含音讯分析的索引数据。
+    - `parsedData`: 经解析的数据，包含每个频率区间的计数和百分比。
 - `indexToFrequency(index)`: 将 `analyserData` 的内容索引值转化为频率的函式。
 - `originAudioData`: 实时的原始音讯数据，可用于可视化或其他实时处理。
 
