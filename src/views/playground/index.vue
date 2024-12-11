@@ -39,7 +39,7 @@ import MaterialSymbolsLanguage from '~icons/material-symbols/language';
 import MaterialSymbolsInfoOutline from '~icons/material-symbols/info-outline';
 import { useI18n } from 'vue-i18n';
 
-import { useAudioAnalyser } from '@/composables/useAudioAnalyser';
+import { useAudioAnalyser } from 'vue-audio-analyser';
 const { startAudioCapture, stopAudioCapture, originAudioData } = useAudioAnalyser();
 
 const active = ref<boolean>(false);

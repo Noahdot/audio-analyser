@@ -5,10 +5,11 @@
 <script setup lang="ts">
 import Chart from 'chart.js/auto';
 import { ref, onMounted } from 'vue';
-import { indexToAudio } from '@/utils/audioConfig';
+import { useAudioAnalyser } from 'vue-audio-analyser';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
+const { indexToFrequency } = useAudioAnalyser();
 const props = defineProps(['data']);
 const chart = ref()
 
@@ -20,7 +21,7 @@ const chartInit = () => {
       The raw data represents a range, so when converting it to the chart,
       a random number within the range will be used.
     */
-    const segment = indexToAudio(item.toString());
+    const segment = indexToFrequency(item.toString());
     const [ min, max ] = segment.split('~').map(Number);
     return Math.round(Math.random() * (max - min) + min);
   });

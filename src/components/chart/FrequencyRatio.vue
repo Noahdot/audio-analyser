@@ -5,10 +5,12 @@
 <script setup lang="ts">
 import Chart from 'chart.js/auto';
 import { ref, onMounted } from 'vue';
-import { FREQ_SEGMENT_COUNT, indexToAudio } from '@/utils/audioConfig';
+import { FREQ_SEGMENT_COUNT } from '@/utils/audioConfig';
 import { useI18n } from 'vue-i18n';
+import { useAudioAnalyser } from 'vue-audio-analyser';
 
 const { t } = useI18n();
+const { indexToFrequency } = useAudioAnalyser();
 const props = defineProps(['data']);
 const chart = ref()
 
@@ -21,7 +23,7 @@ const chartInit = () => {
     if (i === (FREQ_SEGMENT_COUNT - 1)) {
       labels.push('>400');
     } else {
-      labels.push(indexToAudio(i.toString()));
+      labels.push(indexToFrequency(i.toString()));
     }
   }
 
