@@ -32,9 +32,6 @@
   <NoticeDialog ref="noticeDialogRef" />
 </template>
 <script setup lang="ts">
-import { ref, watch } from 'vue';
-import NoticeDialog from '@/components/NoticeDialog.vue';
-import AnalyserResult from '@/components/AnalyserResult.vue';
 import MaterialSymbolsLanguage from '~icons/material-symbols/language';
 import MaterialSymbolsInfoOutline from '~icons/material-symbols/info-outline';
 import { useI18n } from 'vue-i18n';

@@ -15,8 +15,6 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeMount, ref } from 'vue';
-import DialogWrapper from '@/components/DialogWrapper.vue';
 import { useSuppressDialog } from '@/composables/useSuppressDialog';
 
 const { checkSuppressTime, setSuppressTime, removeSuppressTime } = useSuppressDialog();

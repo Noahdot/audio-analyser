@@ -4,7 +4,6 @@
 
 <script setup lang="ts">
 import Chart from 'chart.js/auto';
-import { ref, onMounted } from 'vue';
 import { useAudioAnalyser } from 'vue-audio-analyser';
 import { useI18n } from 'vue-i18n';
 

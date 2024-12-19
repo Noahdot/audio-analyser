@@ -4,7 +4,6 @@
 
 <script setup lang="ts">
 import Chart from 'chart.js/auto';
-import { ref, onMounted } from 'vue';
 import { FREQ_SEGMENT_COUNT } from '@/utils/audioConfig';
 import { useI18n } from 'vue-i18n';
 import { useAudioAnalyser } from 'vue-audio-analyser';

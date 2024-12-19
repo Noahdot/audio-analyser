@@ -1,5 +1,3 @@
-import { ref } from "vue";
-
 export const useAudioAnalyser = () => {
   const source = ref<MediaStreamAudioSourceNode | null>(null);
   const analyser = ref<AnalyserNode | null>(null);
@@ -8,7 +6,7 @@ export const useAudioAnalyser = () => {
   const analyserData = ref<number[]>([]);
   const UINT_8_ARRAY_LENGTH = 20;
 
-  const getUserMediaStream = (): Promise<MediaStream> => {
+  const _getUserMediaStream = (): Promise<MediaStream> => {
     return new Promise((resolve, reject) => {
       navigator.mediaDevices.getUserMedia({ audio: true })
         .then((stream: MediaStream) => resolve(stream))
@@ -45,7 +43,7 @@ export const useAudioAnalyser = () => {
 
   const startAudioCapture = async () => {
     try {
-      const stream: MediaStream = await getUserMediaStream();
+      const stream: MediaStream = await _getUserMediaStream();
       const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
       source.value = audioContext.createMediaStreamSource(stream);
       analyser.value = audioContext.createAnalyser();

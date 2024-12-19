@@ -9,8 +9,6 @@
 </template>
 
 <script setup lang="ts">
-import FrequencyRatio from '@/components/chart/FrequencyRatio.vue';
-import OriginalAudio from '@/components/chart/OriginalAudio.vue';
 import Chart from 'chart.js/auto';
 Chart.defaults.color = '#ffffff';
 

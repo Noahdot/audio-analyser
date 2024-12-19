@@ -1,7 +1,7 @@
 import { getTomorrow } from '@/utils/formatDate';
 
 export const useSuppressDialog = () => {
-  const getSuppressArray = () => {
+  const _getSuppressArray = () => {
     const hasSuppress = localStorage.getItem('suppress');
     if (hasSuppress) {
       const suppressData = JSON.parse(hasSuppress);
@@ -13,7 +13,7 @@ export const useSuppressDialog = () => {
   }
 
   const checkSuppressTime = (key: string): boolean => {
-    const suppressData = getSuppressArray();
+    const suppressData = _getSuppressArray();
     if (suppressData) {
       const target = suppressData.find((item: any) => item.key === key);
       if (target) {
@@ -24,7 +24,7 @@ export const useSuppressDialog = () => {
   }
 
   const setSuppressTime = (key: string): void => {
-    const suppressData = getSuppressArray();
+    const suppressData = _getSuppressArray();
     if (suppressData) {
       const target = suppressData.find((item: any) => item.key === key);
       if (target) {
@@ -35,27 +35,27 @@ export const useSuppressDialog = () => {
           time: getTomorrow()
         });
       }
-      updateSuppress(suppressData);
+      _updateSuppress(suppressData);
     } else {
       const data = {
         key,
         time: getTomorrow()
       };
-      updateSuppress([data]);
+      _updateSuppress([data]);
     }
   }
 
   const removeSuppressTime = (key: string): void => {
-    const suppressData = getSuppressArray();
+    const suppressData = _getSuppressArray();
     if (suppressData) {
       const target = suppressData.find((item: any) => item.key === key);
       if (target) {
-        updateSuppress(suppressData.filter((item: any) => item.key !== key));
+        _updateSuppress(suppressData.filter((item: any) => item.key !== key));
       }
     }
   }
 
-  const updateSuppress = (array) => {
+  const _updateSuppress = (array) => {
     localStorage.setItem('suppress', JSON.stringify(array));
   }
 
